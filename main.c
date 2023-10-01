@@ -52,6 +52,11 @@ int main(int argc, char* argv[])
 
 
             }
+            else
+            {
+                printf("\n ERROR \n");
+                goto AAA;
+            }
 
 
 
@@ -114,6 +119,11 @@ int main(int argc, char* argv[])
                 fprintf(file, "%f\n", result);
 
 
+            }
+            else
+            {
+                printf("\n ERROR \n");
+                goto AA;
             }
 
 
