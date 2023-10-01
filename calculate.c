@@ -1,143 +1,101 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<readline/readline.h>
-#include "Stack.h"
-#include"shift.h"
 #include"calculate.h"
-
-#define CLOSE "\001\033[0m\002"
-#define BLOD  "\001\033[1m\002"
-#define BEGIN(x,y) "\001\033["#x";"#y"m\002"
-int main(int argc, char* argv[])
+double calculate(char* str2)
 {
-    if (argc != 3 || strcmp(argv[1], "-t") != 0)
+
+    if (str2[2] != 'q')
     {
+        Stackf sf;
+        InitStackf(&sf);
+        int jj = 0;
+        int i = 0;
+        char str3[MAXBUFFER];
+        double m, n = 0;
+        stack_clearf(&sf);
 
-        char* str1;
-        char m;
-        double result = 0;
-        char str2[50] = { " " };
-        printf("请输入中缀表达式(输入help获取帮助）:\n");
-
-
-
-
-
-        do
+        while (str2[jj] != '\n')
         {
-
-
-
-
-        AAA:str1 = readline(BEGIN(49, 34)"Myshell $ "CLOSE);
-
-
-            add_history(str1);
-
-            m = shift(str1, &str2);
-            if (m == 'q')
+            while ((str2[jj] >= '0' && str2[jj] <= '9') || str2[jj] == '.')
             {
-
-                break;
-            }
-            else if (m == 'h')
-            {
-                printf("帮助指南：\n输入quit退出程序\nCtrl+u清除表达式\n↑↓查看历史命令表达式\n");
-
-                goto AAA;
-            }
-            else if (m == '0')
-            {
-                result = calculate(&str2);
-
-
-
-            }
-
-
-
-
-
-
-
-        } while (1);
-        free(str1);
-
-        return 0;
-
-
-
-    }
-    else
-    {
-
-        char* filename = argv[2];
-        FILE* file = fopen(filename, "w");
-        char* str1;
-        char m;
-        double result = 0;
-        char E[] = { "Error" };
-        char str2[50] = { " " };
-        printf("请输入中缀表达式(输入help获取帮助）:\n");
-
-
-
-
-
-        do
-        {
-
-
-
-
-        AA:str1 = readline(BEGIN(49, 34)"Myshell $ "CLOSE);
-
-            add_history(str1);
-
-
-
-            m = shift(str1, &str2);
-
-            if (m == 'q')
-            {
-
-                break;
-            }
-            else if (m == 'h')
-            {
-                printf("帮助指南：\n输入quit退出程序\nCtrl+u清除表达式\n↑↓查看历史命令表达式\n");
-
-                goto AA;
-            }
-            else if (m == '0')
-            {
-                result = calculate(&str2);
-                if (result == 'E')
+                str3[i++] = str2[jj++];
+                str3[i] = '\0';
+                if (i >= 25)
                 {
-                    fprintf(file, "%s\n", E);
+                    printf("fail:single data too large！\n");
+                    return -1;
+                }
+
+
+
+
+                if (str2[jj] == ' ')
+                {
+                    jj++;
+                    m = atof(str3);
+                    Pushf(&sf, m);
+
+
+                    i = 0;
+
+                }
+
+            }
+
+            switch (str2[jj++])
+            {
+            case '+':
+
+                Popf(&sf, &n);
+                Popf(&sf, &m);
+                Pushf(&sf, (n + m));
+
+                break;
+            case'-':
+                Popf(&sf, &n);
+                Popf(&sf, &m);
+                Pushf(&sf, m - n);
+
+                break;
+            case'*':
+
+                Popf(&sf, &n);
+                Popf(&sf, &m);
+                Pushf(&sf, m * n);
+
+                break;
+            case'/':
+                Popf(&sf, &n);
+                Popf(&sf, &m);
+                if (n != 0)
+                {
+                    Pushf(&sf, m / n);
                 }
                 else
                 {
-                    fprintf(file, "%f\n", result);
+                    printf("\nfail:devided by 0\n");
+                    return 'E';
                 }
 
+
+                break;
+
+
+
+
             }
-            else if (m == 'E')
-            {
 
-                fprintf(file, "%s\n", E);
+        }
+        Popf(&sf, &m);
 
-            }
+        write_history(m);
 
+        printf("\n result：%f\n", m);
+        return m;
+    }
+    else
 
-
-
-        } while (1);
-        free(str1);
-        fclose(file);
+    {
+        str2 = "quit";
         return 0;
     }
-
 
 }
