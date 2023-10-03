@@ -8,8 +8,7 @@ char shift(char* str1, char* str2)
     int i = 0;
     InitStack(&s);
     stack_clear(&s);
-    str2[j++] = '0';
-    str2[j++] = ' ';
+
     c = str1[i++];
 
     if (c >= '0' && c <= '9' || c == '+' || c == '-' || c == '(')
@@ -35,20 +34,29 @@ char shift(char* str1, char* str2)
             if (')' == c)
             {
                 Pop(&s, &e);
-                if (e == '(')
+                if (e == '(' && str1[i - 2] == '(')
                 {
-                    printf("ERROR!\n");
+
                     return 'E';
                 }
                 while ('(' != e)
                 {
                     printf("%c ", e);
                     str2[j++] = e;
+                    str2[j++] = ' ';
                     Pop(&s, &e);
                 }
             }
             else if ('+' == c || '-' == c)
             {
+
+                if (str1[i - 2] == '(' || i - 2 < 0)
+                {
+                    printf("0 ");
+                    str2[j++] = '0';
+                    str2[j++] = ' ';
+
+                }
                 if (!StackLen(s))
                 {
                     Push(&s, c);
@@ -66,6 +74,7 @@ char shift(char* str1, char* str2)
                         {
                             printf("%c ", e);
                             str2[j++] = e;
+                            str2[j++] = ' ';
                         }
                     } while (StackLen(s) && '(' != e);
                     Push(&s, c);
@@ -86,7 +95,7 @@ char shift(char* str1, char* str2)
             }
             else
             {
-                printf("\nERROR!\n");
+
                 return 'E';
             }
 
@@ -96,10 +105,12 @@ char shift(char* str1, char* str2)
         while (StackLen(s))
         {
             Pop(&s, &e);
-            printf("%c", e);
+            printf("%c ", e);
             str2[j++] = e;
+            str2[j++] = ' ';
         }
-        str2[j] = '\n';
+
+        str2[j] = '\0';
         return'0';
 
     }

@@ -14,8 +14,8 @@ int main(int argc, char* argv[])
 
         char* str1;
         char m;
-        double result = 0;
-        char str2[20] = { " " };
+        double r = 0;
+        char str2[100] = { " " };
         printf("please input Reverse Polish notation(input help to get help list£©:\n");
 
 
@@ -41,20 +41,20 @@ int main(int argc, char* argv[])
             }
             else if (m == 'h')
             {
-                printf("help list£º\n input quit to end\n input Ctrl+u to clean your inputs \n ¡ü¡ýsearch hisry inputs\n");
+                printf("help list£º\n input quit to end\n input Ctrl+u to clean your inputs \n ¡ü¡ýsearch history inputs\n");
 
                 goto AAA;
             }
             else if (m == '0')
             {
-                result = calculate(&str2);
+                calculate(&str2, &r);
 
 
 
             }
             else
             {
-                printf("\n ERROR \n");
+                printf("ERROR\n");
                 goto AAA;
             }
 
@@ -79,8 +79,8 @@ int main(int argc, char* argv[])
         FILE* file = fopen(filename, "w");
         char* str1;
         char m;
-        double result = 0;
-        char str2[20] = { " " };
+        double r = 0;
+        char str2[100] = { " " };
         printf("please input Reverse Polish notation(input help to get help list£©:\n");
 
 
@@ -109,20 +109,27 @@ int main(int argc, char* argv[])
             }
             else if (m == 'h')
             {
-                printf("help list£º\n input quit to end\n input Ctrl+u to clean your inputs \n ¡ü¡ý²ésearch htory inputs\n");
+                printf("help list£º\n input quit to end\n input Ctrl+u to clean your inputs \n ¡ü¡ý²ésearch h history inputs\n");
 
                 goto AA;
             }
             else if (m == '0')
             {
-                result = calculate(&str2);
-                fprintf(file, "%f\n", result);
-
+                calculate(&str2, &r);
+                if (str2[0] == 'E')
+                {
+                    fprintf(file, "ERROR\n");
+                }
+                else
+                {
+                    fprintf(file, "%f\n", r);
+                }
 
             }
             else
             {
-                printf("\n ERROR \n");
+                printf("ERROR\n");
+                fprintf(file, "ERROR\n");
                 goto AA;
             }
 
