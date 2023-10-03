@@ -1,8 +1,8 @@
 #include"calculate.h"
-double calculate(char* str2)
+double calculate(char* str2, double* r)
 {
 
-    if (str2[2] != 'q')
+    if (str2[0] != 'q')
     {
         Stackf sf;
         InitStackf(&sf);
@@ -12,9 +12,9 @@ double calculate(char* str2)
         double m, n = 0;
         stack_clearf(&sf);
 
-        while (str2[jj] != '\n')
+        while (str2[jj] != '\0')
         {
-            while ((str2[jj] >= '0' && str2[jj] <= '9') || str2[jj] == '.')
+            while ((str2[jj] >= '0' && str2[jj] <= '9') || str2[jj] == '.' || (str2[jj + 1] >= '0' && str2[jj + 1] <= '9'))
             {
                 str3[i++] = str2[jj++];
                 str3[i] = '\0';
@@ -31,6 +31,7 @@ double calculate(char* str2)
                 {
                     jj++;
                     m = atof(str3);
+
                     Pushf(&sf, m);
 
 
@@ -39,7 +40,6 @@ double calculate(char* str2)
                 }
 
             }
-
             switch (str2[jj++])
             {
             case '+':
@@ -48,12 +48,14 @@ double calculate(char* str2)
                 Popf(&sf, &m);
                 Pushf(&sf, (n + m));
 
+                jj++;
                 break;
             case'-':
                 Popf(&sf, &n);
                 Popf(&sf, &m);
                 Pushf(&sf, m - n);
 
+                jj++;
                 break;
             case'*':
 
@@ -61,6 +63,7 @@ double calculate(char* str2)
                 Popf(&sf, &m);
                 Pushf(&sf, m * n);
 
+                jj++;
                 break;
             case'/':
                 Popf(&sf, &n);
@@ -68,11 +71,14 @@ double calculate(char* str2)
                 if (n != 0)
                 {
                     Pushf(&sf, m / n);
+
+                    jj++;
                 }
                 else
                 {
                     printf("\nfail:devided by 0\n");
-                    return 'E';
+                    str2[0] = 'E';
+                    return -1;
                 }
 
 
@@ -89,13 +95,14 @@ double calculate(char* str2)
         write_history(m);
 
         printf("\n result£º%f\n", m);
-        return m;
+        *r = m;
+
     }
     else
-
     {
         str2 = "quit";
         return 0;
+
     }
 
 }
